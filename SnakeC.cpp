@@ -1,4 +1,4 @@
-﻿#include "SnakeC.h"
+#include "SnakeC.h"
 #include "Func.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -20,6 +20,7 @@ int main(){
 			reset();
 			system("cls");
 			drawSnake();
+			injectMap();
 			while (!game) {
 				// Hraci plocha
 				drawField();
@@ -35,6 +36,9 @@ int main(){
 			break;
 		case 'a':
 			LeaderBoard();
+			break;
+		case 'g':
+			generateMap();
 			break;
 		case 'q':
 			quit = 0;
