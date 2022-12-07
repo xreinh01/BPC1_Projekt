@@ -9,6 +9,8 @@ void HighScore(int score);
 void LeaderBoard();
 void reset();
 void MainMenu();
+void generateMap();
+void injectMap();
 
 struct score {
 	char name[32];
