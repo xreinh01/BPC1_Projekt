@@ -245,4 +245,6 @@ void MainMenu() {
 	printf("\n for Start press S");
 	printf("\n for HighScores press A");
 	printf("\n for Quit press Q");
+	printf("\n\n\n GitHub==>>");
+	printf("\n https://github.com/xreinh01/BPC1_Projekt");
 }
