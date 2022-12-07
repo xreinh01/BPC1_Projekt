@@ -6,7 +6,7 @@
 #include <string.h>
 #include "Func.h"
 
-int field[WIDTH][HEIGHT], x, y, tempx, head = 0, tail = 0, length = 2, dir = 5, ch, apple, applex, appley, difficulty = 100, score = 0, game = 0;
+int field[WIDTH][HEIGHT], x, y, tempx, head = 0, tail = 0, length = 2, dir = 5, ch, apple, applex, appley, difficulty = 160, score = 0, game = 0;
 
 // Hraci plocha
 void drawField() {
@@ -14,6 +14,7 @@ void drawField() {
 	for (int j = -1; j < HEIGHT; j++) {
 		for (int i = -1; i < WIDTH; i++) {
 			if (field[i][j] == -2) printf("#");
+			if (field[i][j] == -3) printf("$");
 			if (field[i][j] == 0) printf(" ");
 			if (field[i][j] > 0 && field[i][j] != head) printf("x");   // Tiskne telo hada
 			if (field[i][j] == head) printf("0");   // Hlava hada
@@ -82,7 +83,7 @@ void appleTime() {
 		apple = 0;
 		length++;
 		if (length % 3 > 0) {
-			if (difficulty >= 50) difficulty = difficulty - 10;
+			if (difficulty >= 20) difficulty = difficulty - 10;
 		}
 	}
 }
@@ -161,7 +162,8 @@ void HighScore(int score) {
 	char plname[20] = "";
 	FILE* Data;
 	Data = fopen("HighScores.txt", "a+");
-	printf("Zadejte jmeno hrace\n");
+	printf("Game Over\n");
+	printf("Enter Player Name:\n");
 	gets_s(plname);
 	if (strcmp(plname, "") != 0) {
 		fprintf(Data, "\n%s: %d", plname, score);
@@ -244,7 +246,59 @@ void MainMenu() {
 	printf("          SNAKE          ");
 	printf("\n for Start press S");
 	printf("\n for HighScores press A");
+	printf("\n for MapTemplate press G - also resets the current map");
 	printf("\n for Quit press Q");
 	printf("\n\n\n GitHub==>>");
 	printf("\n https://github.com/xreinh01/BPC1_Projekt");
+}
+
+void generateMap() {
+	FILE* MapFile;
+	fopen_s(&MapFile, "MapFile.txt", "w");
+	system("cls");
+
+	for (int i = 0; i < WIDTH; i++) {
+		fprintf(MapFile, "%c", '#');
+	}
+
+	fprintf(MapFile, "#\n#");
+
+	for (int j = 0; j < HEIGHT-1; j++) {
+
+		for (int i = 0; i < WIDTH-1; i++) {
+			fprintf(MapFile, "%c", 'o');
+		}
+		fprintf(MapFile, "#\n#");
+
+	}
+
+	// Dolni okraj
+	for (int i = 0; i < WIDTH; i++) {
+		fprintf(MapFile, "%c", '#');
+	}
+
+	fprintf(MapFile, "\n\n\n To create a barrier, replace 'o' with $.");
+	printf("Map template generated succesfully.");
+	getchar();
+
+	fclose(MapFile);
+}
+
+void injectMap() {
+	FILE* MapFile;
+	fopen_s(&MapFile, "MapFile.txt", "r+");
+	
+	fseek(MapFile, WIDTH+1, SEEK_SET);
+
+	for (int j = 0; j < HEIGHT; j++) {
+
+		for (int i = 0; i < WIDTH+1; i++) {
+			char check = getc(MapFile);
+			if (check == '$') {
+				field[i-2][j] = -3;
+			}   
+		}
+		fseek(MapFile, 2, SEEK_CUR);
+	}
+	fclose(MapFile);
 }
